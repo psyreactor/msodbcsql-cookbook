@@ -1,0 +1,10 @@
+name             'msodbcsql'
+maintainer       ''
+maintainer_email ''
+license          ''
+description      'Installs/Configures msodbcsql'
+long_description 'Installs/Configures msodbcsql'
+version          '0.1.0'
+
+depends 'build-essential'
+depends 'yum-epel'
