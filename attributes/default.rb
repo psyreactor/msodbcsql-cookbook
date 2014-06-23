@@ -7,3 +7,6 @@ default[:msodbcsql][:filename] = "msodbcsql-#{node[:msodbcsql][:version]}"
 
 default[:msodbcsql][:url] = "http://download.microsoft.com/download/B/C/D/BCDD264C-7517-4B7D-8159-C99FC5535680/RedHat6/#{node[:msodbcsql][:filename]}.tar.gz"
 default[:msodbcsql][:package] = %w(freetds freetds-devel)
+
+default[:msodbcsql][:odbc][:file] = '/etc/odbc.ini'
+default[:msodbcsql][:odbc][:dns] = {}

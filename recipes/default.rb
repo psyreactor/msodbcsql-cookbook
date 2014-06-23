@@ -21,9 +21,12 @@ node.set['build-essential']['compile_time'] = true
 include_recipe 'build-essential::default'
 include_recipe 'yum-epel::default'
 
-package 'unixODBC' do
-  action :remove
-  ignore_failure true
+gem_package 'inifile' do
+  action :nothing
+end.run_action(:install)
+
+ruby_block 'inifile_load' do
+  block { require 'inifile' }
 end
 
 node[:msodbcsql][:package].each do |pkg|
@@ -85,4 +88,12 @@ execute 'msodbcsql_install' do
   command './install.sh install --accept-license --force'
   action :run
   not_if "sqlcmd | grep #{node[:msodbcsql][:version]}"
+end
+
+node[:msodbcsql][:odbc][:dns].each_pair do | name, dns |
+  msodbcsql_odbc name do
+    server dns[:server]
+    database dns[:database]
+    action :append
+  end
 end

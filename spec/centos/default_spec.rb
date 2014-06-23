@@ -15,6 +15,8 @@ describe 'msodbcsql::default ' do
   before do
     stub_command('odbcinst --version | grep 2.3.0').and_return(false)
     stub_command('sqlcmd | grep 11.0.2270.0').and_return(false)
+    allow(File).to receive(:exist?).and_call_original
+    allow(File).to receive(:exist?).with('inifile').and_return(true)
     allow(Dir).to receive(:exist?).and_call_original
     allow(Dir).to receive(:exist?).with("#{Chef::Config[:file_cache_path]}/unixODBC-2.3.0").and_return(false)
   end
@@ -24,8 +26,12 @@ describe 'msodbcsql::default ' do
     expect(chef_run).to include_recipe('yum-epel::default')
   end
 
-  it 'remove unixODBC' do
-    expect(chef_run).to remove_package('unixODBC')
+  it 'install gem required for cookbook' do
+    expect(chef_run).to install_gem_package('inifile')
+  end
+
+  it 'load gem required for cookbook' do
+    expect(chef_run).to run_ruby_block('inifile_load')
   end
 
   it 'install packages required for tiny-tds' do
