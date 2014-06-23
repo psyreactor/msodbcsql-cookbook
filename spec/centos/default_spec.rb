@@ -9,6 +9,7 @@ describe 'msodbcsql::default ' do
       :version => '6.5'
       ) do |node|
       node.set[:msodbcsql][:version] = '11.0.2270.0'
+      node.set[:msodbcsql][:odbc][:dns][:Test1] = { 'server' => '192.168.168.1', 'database' => 'test1' }
     end.converge('msodbcsql::default')
   end
 
@@ -69,6 +70,10 @@ describe 'msodbcsql::default ' do
 
   it 'install msodbcsql' do
     expect(chef_run).to run_execute('msodbcsql_install')
+  end
+
+  it 'create odbc' do
+    expect(chef_run).to append_msodbcsql_odbc('Test1')
   end
 
 end
